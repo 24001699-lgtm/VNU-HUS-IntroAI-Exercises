@@ -1,0 +1,66 @@
+import java.util.*;
+
+public class CNF {
+    // Đánh giá literal
+    static boolean evalLiteral(String literal, Map<String, Boolean> assign) {
+        return literal.startsWith("-")
+                ? !assign.get(literal.substring(1))
+                : assign.get(literal);
+    }
+
+    static boolean evalClause(List<String> clause, Map<String, Boolean> assign) {
+        for (String literal : clause) {
+            if (evalLiteral(literal, assign)) return true;
+        }
+        return false;
+    }
+
+    static boolean evalFormula(List<List<String>> cnf, Map<String, Boolean> assign) {
+        for (List<String> clause : cnf) {
+            if (!evalClause(clause, assign)) return false;
+        }
+        return true;
+    }
+
+    // Theorem prover
+    static void theoremProver(List<List<String>> cnf) {
+        // Lấy danh sách biến
+        Set<String> vars = new HashSet<>();
+        for (List<String> clause : cnf) {
+            for (String literal : clause) {
+                vars.add(literal.replace("-", ""));
+            }
+        }
+        List<String> varList = new ArrayList<>(vars);
+
+        int total = 1 << varList.size(); 
+        int models = 0;
+
+        // Sinh tất cả gán giá trị
+        for (int mask = 0; mask < total; mask++) {
+            Map<String, Boolean> assign = new HashMap<>();
+            for (int j = 0; j < varList.size(); j++) {
+                assign.put(varList.get(j), (mask & (1 << j)) != 0);
+            }
+            if (evalFormula(cnf, assign)) {
+                models++;
+                if (models <= 8) System.out.println("Mô hình " + models + ": " + assign);
+            }
+        }
+
+        String status = (models == 0) ? "UNSATISFIABLE"
+                       : (models == total) ? "VALID / TAUTOLOGY"
+                       : "SATISFIABLE";
+        System.out.println("Trạng thái: " + status);
+        System.out.println("Tổng số diễn giải: " + total);
+        System.out.println("Số mô hình thỏa: " + models);
+    }
+    public static void main(String[] args) {
+        List<List<String>> cnf = Arrays.asList(
+                Arrays.asList("A", "B"),
+                Arrays.asList("-B", "C"),
+                Arrays.asList("D", "-A")
+        );
+        theoremProver(cnf);
+    }
+}
