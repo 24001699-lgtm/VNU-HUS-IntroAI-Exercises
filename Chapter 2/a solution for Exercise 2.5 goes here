@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class CNF {
-    // Đánh giá literal
+
     static boolean evalLiteral(String literal, Map<String, Boolean> assign) {
         return literal.startsWith("-")
                 ? !assign.get(literal.substring(1))
@@ -24,7 +24,7 @@ public class CNF {
 
     // Theorem prover
     static void theoremProver(List<List<String>> cnf) {
-        // Lấy danh sách biến
+
         Set<String> vars = new HashSet<>();
         for (List<String> clause : cnf) {
             for (String literal : clause) {
@@ -64,3 +64,4 @@ public class CNF {
         theoremProver(cnf);
     }
 }
+
