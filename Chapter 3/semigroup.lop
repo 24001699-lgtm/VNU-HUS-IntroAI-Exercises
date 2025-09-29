@@ -1,1 +1,13 @@
 % Create a solution for Exercise 3.9(c), page 64
+fof(assoc, axiom, ![X,Y,Z] : ( dot(dot(X,Y),Z) = dot(X,dot(Y,Z)) ) ).
+
+fof(left_neutral, axiom, ![X] : dot(e,X) = X ).
+
+fof(left_null, axiom, ![X] : dot(n,X) = n ).
+
+fof(diff_elements, axiom, a != b ).
+
+fof(assume_eq, axiom, n = e ).
+
+fof(goal, conjecture, $false).
+
