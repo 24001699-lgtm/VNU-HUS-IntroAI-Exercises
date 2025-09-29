@@ -1,1 +1,4 @@
-% Create a solution for Exercise 3.9(b), page 64
+fof(comprehension, axiom,
+    ![X] : ( in(X,r) <=> ~ in(X,X) ) ).
+
+fof(goal, conjecture, $false).
