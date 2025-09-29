@@ -1,1 +1,11 @@
 % Create a solution for Exercise 3.9(a), page 64
+% High Jump problem (Exercise 3.9(a), page 64)
+
+cnf(c1, axiom, (~a | ~b)).
+cnf(c2, axiom, ( a |  b)).
+cnf(c3, axiom, (~b | ~c)).
+cnf(c4, axiom, ( b |  c)).
+cnf(c5, axiom, (~c | ~a)).
+cnf(c6, axiom, ( c |  a)).
+
+cnf(goal, conjecture, $false).
