@@ -1,1 +1,5 @@
 % Create a solution for Exercise 4.3, page 73
+penguin(tweety)
+¬penguin(x) ∨ bird(x)
+¬bird(x) ∨ penguin(x) ∨ fly(x)
+¬penguin(x) ∨ ¬fly(x)
