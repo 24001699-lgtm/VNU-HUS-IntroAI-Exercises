@@ -1,1 +1,3 @@
 % Create a solution for Exercise 4.3, page 73
+raven(abraxas)
+¬raven(x) ∨ bird(x)
