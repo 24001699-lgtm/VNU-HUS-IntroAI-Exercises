@@ -1,1 +1,2 @@
 % Create a solution for Exercise 4.3, page 73
+¬penguin(x) ∨ ¬fly(x)
