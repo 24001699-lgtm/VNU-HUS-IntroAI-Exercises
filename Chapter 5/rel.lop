@@ -1,1 +1,14 @@
 % Create a solution for Exercise 5.4(a), page 88 
+fof(child1, axiom, child(oscar,karen,frank)).
+fof(child2, axiom, child(mary,karen,frank)).
+fof(child3, axiom, child(eve,anne,oscar)).
+fof(child4, axiom, child(henry,anne,oscar)).
+fof(child5, axiom, child(isolde,anne,oscar)).
+fof(child6, axiom, child(clyde,mary,oscar)).
+
+% descendant rules (as universally quantified implications)
+fof(d1, axiom, ![X,Y,Z] : ( child(X,Y,Z) => descendant(X,Y) )).
+fof(d2, axiom, ![X,Y,Z] : ( ( child(X,_,Z) & descendant(Z,Y) ) => descendant(X,Y) )).
+
+% Conjecture: descendant(clyde,karen) should follow
+fof(goal, conjecture, descendant(clyde,karen))
