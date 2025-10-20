@@ -1,0 +1,118 @@
+import heapq
+import time
+
+
+GOAL = "123456780"  # 0 là ô trống
+MOVE = [(-1, 0), (1, 0), (0, -1), (0, 1)] 
+
+# Hàm lấy các trạng thái kề
+def get_neighbors(state):
+    neighbors = []
+    idx = state.index('0')
+    x, y = divmod(idx, 3)
+    for dx, dy in MOVE:
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < 3 and 0 <= ny < 3:
+            nidx = nx * 3 + ny
+            new_state = list(state)
+            new_state[idx], new_state[nidx] = new_state[nidx], new_state[idx]
+            neighbors.append(''.join(new_state))
+    return neighbors
+
+
+# Heuristic h1: 
+def h1(state):
+    return sum(1 for i, v in enumerate(state) if v != '0' and v != GOAL[i])
+
+
+# Heuristic h2:
+def h2(state):
+    distance = 0
+    for i, v in enumerate(state):
+        if v != '0':
+            goal_index = GOAL.index(v)
+            x1, y1 = divmod(i, 3)
+            x2, y2 = divmod(goal_index, 3)
+            distance += abs(x1 - x2) + abs(y1 - y2)
+    return distance
+
+
+
+# Thuật toán A*
+
+def a_star(start, heuristic):
+    frontier = []
+    heapq.heappush(frontier, (heuristic(start), 0, start, [start]))
+    explored = set()
+    expanded_nodes = 0
+
+    while frontier:
+        f, g, state, path = heapq.heappop(frontier)
+
+        if state == GOAL:
+            return path, expanded_nodes
+
+        explored.add(state)
+        expanded_nodes += 1
+
+        for neighbor in get_neighbors(state):
+            if neighbor not in explored:
+                new_g = g + 1
+                new_f = new_g + heuristic(neighbor)
+                heapq.heappush(frontier, (new_f, new_g, neighbor, path + [neighbor]))
+
+    return None, expanded_nodes
+
+
+
+# Hàm in trạng thái dạng bảng
+
+def print_state(state):
+    for i in range(0, 9, 3):
+        print(state[i:i+3].replace('0', ' '))
+    print()
+
+
+
+# Chạy thử
+
+if __name__ == "__main__":
+    # Ví dụ trạng thái ban đầu
+    start_state = "283164705"   # bạn có thể đổi trạng thái này để test
+
+    print("=== Bắt đầu từ trạng thái ===")
+    print_state(start_state)
+
+    # ---- A* với h1 ----
+    print("🔸 A* với h1 (Misplaced Tiles)")
+    start_time = time.time()
+    path_h1, expanded_h1 = a_star(start_state, h1)
+    end_time = time.time()
+
+    if path_h1:
+        print(f"Số bước: {len(path_h1) - 1}")
+        print(f"Số nút mở rộng: {expanded_h1}")
+        print(f"Thời gian: {end_time - start_time:.4f} giây")
+    else:
+        print("Không tìm thấy lời giải")
+
+    print("\nLộ trình (h1):")
+    for p in path_h1:
+        print_state(p)
+
+    # ---- A* với h2 ----
+    print("🔸 A* với h2 (Manhattan Distance)")
+    start_time = time.time()
+    path_h2, expanded_h2 = a_star(start_state, h2)
+    end_time = time.time()
+
+    if path_h2:
+        print(f"Số bước: {len(path_h2) - 1}")
+        print(f"Số nút mở rộng: {expanded_h2}")
+        print(f"Thời gian: {end_time - start_time:.4f} giây")
+    else:
+        print("Không tìm thấy lời giải")
+
+    print("\nLộ trình (h2):")
+    for p in path_h2:
+        print_state(p)
